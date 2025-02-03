@@ -23,6 +23,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 
 ### 2. Chat Room (chat_room.html)
 ![Chat Room](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/5.png)
+![Chat Room](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/multi%20user.png)
 
 **Features:**
 - Real-time one-on-one chat interface
