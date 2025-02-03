@@ -5,7 +5,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 ## Pages and Features
 
 ### 1. Home Page (home.html)
-![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/Screenshot%20(3).png)
+![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/1.png)
 
 **Features:**
 - User welcome header with nickname display
@@ -22,6 +22,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Custom button designs with hover and active states
 
 ### 2. Chat Room (chat_room.html)
+![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/Screenshot%20(3).png)
 
 **Features:**
 - Real-time one-on-one chat interface
@@ -40,6 +41,9 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Custom scrollbar styling
 
 ### 3. Group Chat Room (group_chat_room.html)
+### 1. Home Page (home.html)
+![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/Screenshot%20(3).png)
+
 
 **Features:**
 - Real-time group messaging
