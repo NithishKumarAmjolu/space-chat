@@ -1,0 +1,26 @@
+# Core Django and Channels
+Django>=5.0.0
+channels>=4.0.0
+daphne>=4.0.0
+channels-redis>=4.1.0
+
+# Database
+asgiref>=3.7.0
+
+# WebSocket Dependencies
+websockets>=11.0.0
+autobahn>=23.0.0
+Twisted>=23.0.0
+txaio>=23.0.0
+
+# Security
+cryptography>=41.0.0
+pyOpenSSL>=23.0.0
+service_identity>=23.0.0
+
+# Django Extensions
+django-cors-headers>=4.3.0
+django-crispy-forms>=2.0
+
+# Development Tools
+python-dotenv>=1.0.0

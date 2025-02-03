@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000851, #1CB5E0);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .card {
+            position: relative;
+            z-index: 2;
+            background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+            border-radius: 22px;
+            transition: all 0.3s;
+            padding: 3px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 2em;
+            background-color: #171717;
+            border-radius: 25px;
+            transition: 0.4s ease-in-out;
+            width: 350px;
+            max-width: 90%;
+        }
+
+        .card2 {
+            border-radius: 0;
+            transition: all 0.2s;
+        }
+
+        .card2:hover {
+            transform: scale(0.98);
+            border-radius: 20px;
+        }
+
+        .card:hover {
+            box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
+        }
+
+        #heading {
+            text-align: center;
+            margin: 0 0 1.5em;
+            color: rgb(255, 255, 255);
+            font-size: 1.2em;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d3d3d3;
+            font-size: 0.9em;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #d3d3d3;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .field input:focus {
+            border-color: #00ff75;
+            box-shadow: 0 0 0 2px rgba(0, 255, 117, 0.2);
+            outline: none;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 0.5em;
+            font-style: italic;
+        }
+
+        button {
+            width: 140px;
+            height: 45px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 1rem;
+            border: none;
+            position: relative;
+            background: #100720;
+            transition: 0.1s;
+            margin: 1em auto;
+            display: block;
+        }
+
+        button::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            filter: blur(15px);
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 1rem;
+        }
+
+        button:active {
+            transform: scale(0.9) rotate(3deg);
+            background: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            transition: 0.5s;
+        }
+
+        button:hover::after {
+            filter: blur(20px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin: 1em 0;
+            color: #d3d3d3;
+        }
+
+        .login-link a {
+            color: #00ff75;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+            color: #00ff9d;
+        }
+
+        .errorlist {
+            color: #ff4444;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .message {
+            padding: 15px 25px;
+            margin: 5px 0;
+            border-radius: 8px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .form {
+                padding: 1.5em;
+                width: 320px;
+            }
+
+            .field input {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            button {
+                width: 120px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            #heading {
+                font-size: 1.1em;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .form {
+                width: 280px;
+                padding: 1.2em;
+            }
+
+            .field label {
+                font-size: 0.85em;
+            }
+
+            .field input {
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .help-text {
+                font-size: 0.75em;
+            }
+
+            button {
+                width: 110px;
+                height: 38px;
+                font-size: 13px;
+            }
+
+            .login-link {
+                font-size: 0.9em;
+            }
+
+            .errorlist {
+                font-size: 0.85em;
+            }
+
+            .message {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .message.success {
+            background-color: rgba(0, 255, 117, 0.2);
+            color: #00ff75;
+            border: 1px solid #00ff75;
+        }
+
+        .message.error {
+            background-color: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card2">
+            <form method="post" class="form">
+                {% csrf_token %}
+                <p id="heading">Sign Up</p>
+                {% for field in form %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="help-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="errorlist">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <button type="submit">Sign Up</button>
+                <div class="login-link">
+                    Already have an account? <a href="{% url 'login-user' %}">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

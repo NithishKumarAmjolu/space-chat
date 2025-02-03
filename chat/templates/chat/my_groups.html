@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Chat Groups</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            background: #100720;
+            color: #fff;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .section h2 {
+            color: rgba(255, 94, 247, 0.8);
+            margin-bottom: 20px;
+        }
+
+        /* Group List */
+        .group-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .group-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 94, 247, 0.1);
+        }
+
+        .group-info {
+            flex-grow: 1;
+        }
+
+        .group-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .group-meta {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border-left: 2px solid rgba(255, 94, 247, 0.5);
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .message.error {
+            border-left: 4px solid #f44336;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+
+        /* New Button Styles */
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 13rem;
+            overflow: hidden;
+            height: 3rem;
+            background-size: 300% 300%;
+            cursor: pointer;
+            backdrop-filter: blur(1rem);
+            border-radius: 5rem;
+            transition: 0.5s;
+            animation: gradient_301 5s ease infinite;
+            border: double 4px transparent;
+            background-image: linear-gradient(#212121, #212121),
+                linear-gradient(137.48deg, #ffdb3b 10%, #fe53bb 45%, #8f51ea 67%, #0044ff 87%);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            text-decoration: none;
+        }
+
+        #container-stars {
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            transition: 0.5s;
+            backdrop-filter: blur(1rem);
+            border-radius: 5rem;
+        }
+
+        strong {
+            z-index: 2;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            letter-spacing: 5px;
+            color: #ffffff;
+            text-shadow: 0 0 4px white;
+        }
+
+        #glow {
+            position: absolute;
+            display: flex;
+            width: 12rem;
+        }
+
+        .circle {
+            width: 100%;
+            height: 30px;
+            filter: blur(2rem);
+            animation: pulse_3011 4s infinite;
+            z-index: -1;
+        }
+
+        .circle:nth-of-type(1) {
+            background: rgba(254, 83, 186, 0.636);
+        }
+
+        .circle:nth-of-type(2) {
+            background: rgba(142, 81, 234, 0.704);
+        }
+
+        .btn:hover #container-stars {
+            z-index: 1;
+            background-color: #212121;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn:active {
+            border: double 4px #fe53bb;
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            animation: none;
+        }
+
+        .btn:active .circle {
+            background: #fe53bb;
+        }
+
+        #stars {
+            position: relative;
+            background: transparent;
+            width: 200rem;
+            height: 200rem;
+        }
+
+        #stars::after {
+            content: "";
+            position: absolute;
+            top: -10rem;
+            left: -100rem;
+            width: 100%;
+            height: 100%;
+            animation: animStarRotate 90s linear infinite;
+        }
+
+        #stars::after {
+            background-image: radial-gradient(#ffffff 1px, transparent 1%);
+            background-size: 50px 50px;
+        }
+
+        #stars::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 170%;
+            height: 500%;
+            animation: animStar 60s linear infinite;
+        }
+
+        #stars::before {
+            background-image: radial-gradient(#ffffff 1px, transparent 1%);
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+
+        @keyframes animStar {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-135rem);
+            }
+        }
+
+        @keyframes animStarRotate {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0);
+            }
+        }
+
+        @keyframes gradient_301 {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header h1 {
+                margin: 0;
+                font-size: 1.8em;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .group-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .group-info {
+                width: 100%;
+            }
+
+            .btn {
+                width: 11rem;
+                height: 2.8rem;
+            }
+
+            .group-meta {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .section h2 {
+                font-size: 1.3em;
+            }
+
+            .group-name {
+                font-size: 16px;
+            }
+
+            .group-meta {
+                font-size: 13px;
+            }
+
+            .btn {
+                width: 10rem;
+                height: 2.6rem;
+            }
+
+            strong {
+                font-size: 11px;
+                letter-spacing: 4px;
+            }
+
+            .message {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .empty-state {
+                padding: 20px;
+                font-size: 14px;
+            }
+        }
+
+        @keyframes pulse_3011 {
+            0% {
+                transform: scale(0.75);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+            }
+            100% {
+                transform: scale(0.75);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>My Chat Groups</h1>
+        <a href="{% url 'chat-page' %}" class="btn">
+            <strong>BACK HOME</strong>
+            <div id="container-stars">
+                <div id="stars"></div>
+            </div>
+            <div id="glow">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </a>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{% url 'create_group' %}" class="btn">
+            <strong>CREATE GROUP</strong>
+            <div id="container-stars">
+                <div id="stars"></div>
+            </div>
+            <div id="glow">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </a>
+        <a href="{% url 'join_group' %}" class="btn">
+            <strong>JOIN GROUP</strong>
+            <div id="container-stars">
+                <div id="stars"></div>
+            </div>
+            <div id="glow">
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </a>
+    </div>
+
+    <div class="section">
+        <h2>Groups I Host</h2>
+        {% if hosted_groups %}
+        <ul class="group-list">
+            {% for group in hosted_groups %}
+            <li class="group-item">
+                <div class="group-info">
+                    <div class="group-name">{{ group.name }}</div>
+                    <div class="group-meta">
+                        ID: {{ group.group_id }}<br>
+                        Members: {{ group.members.count }}
+                    </div>
+                </div>
+                <a href="{% url 'group_chat' group.group_id %}" class="btn">
+                    <strong>OPEN CHAT</strong>
+                    <div id="container-stars">
+                        <div id="stars"></div>
+                    </div>
+                    <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">
+            <p>You haven't created any groups yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Groups I've Joined</h2>
+        {% if member_groups %}
+        <ul class="group-list">
+            {% for group in member_groups %}
+            <li class="group-item">
+                <div class="group-info">
+                    <div class="group-name">{{ group.name }}</div>
+                    <div class="group-meta">
+                        Host: {{ group.host.profile.nickname }}<br>
+                        Members: {{ group.members.count }}
+                    </div>
+                </div>
+                <a href="{% url 'group_chat' group.group_id %}" class="btn">
+                    <strong>OPEN CHAT</strong>
+                    <div id="container-stars">
+                        <div id="stars"></div>
+                    </div>
+                    <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-state">
+            <p>You haven't joined any groups yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ group.name }} - Group Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #100720;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            gap: 20px;
+            flex-direction: row;
+        }
+
+        /* Chat Main Section */
+        .chat-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(0deg, #000, #272727);
+            border-radius: 10px;
+            position: relative;
+            padding: 1px;
+        }
+
+        .chat-main:before, .chat-main:after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: -2px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
+                    #0000ff, #00ff00,#ffff00, #ff0000);
+            background-size: 400%;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            z-index: -1;
+            animation: steam 20s linear infinite;
+        }
+
+        .chat-main:after {
+            filter: blur(50px);
+        }
+
+        /* Members Sidebar */
+        .members-sidebar {
+            width: 250px;
+            background: linear-gradient(0deg, #000, #272727);
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+            position: relative;
+        }
+
+        .members-sidebar:before, .members-sidebar:after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: -2px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
+                    #0000ff, #00ff00,#ffff00, #ff0000);
+            background-size: 400%;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            z-index: -1;
+            animation: steam 20s linear infinite;
+        }
+
+        .members-sidebar:after {
+            filter: blur(50px);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(0deg, #000, #272727);
+            border-radius: 10px 10px 0 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .group-info {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Messages Container */
+        .messages-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: linear-gradient(0deg, #000, #272727);
+            margin-bottom: 20px;
+            height: 400px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        /* Message Styles */
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+        }
+
+        .message-content {
+            padding: 10px;
+            border-radius: 8px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sent {
+            margin-left: auto;
+        }
+
+        .sent .message-content {
+            background: linear-gradient(135deg, rgba(255,94,247,0.2), rgba(2,245,255,0.2));
+            color: white;
+        }
+
+        .received {
+            margin-right: auto;
+        }
+
+        .received .message-content {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .message-sender {
+            font-size: 0.8em;
+            margin-bottom: 2px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message-time {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        /* Input Container */
+        .input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(0deg, #000, #272727);
+            border-radius: 0 0 10px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 16px;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #message-input:focus {
+            border-color: rgba(255,94,247,0.5);
+            box-shadow: 0 0 15px rgba(255,94,247,0.3);
+        }
+
+        #send-button {
+            width: auto;
+            min-width: 100px;
+            height: 45px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 1rem;
+            border: none;
+            position: relative;
+            background: #100720;
+            transition: 0.1s;
+        }
+
+        #send-button::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            filter: blur(15px);
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 1rem;
+        }
+
+        #send-button:active {
+            transform: scale(0.9) rotate(3deg);
+            background: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            transition: 0.5s;
+        }
+
+        /* Button Styles */
+        .btn {
+            width: auto;
+            min-width: 80px;
+            height: 35px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 1rem;
+            border: none;
+            position: relative;
+            background: #100720;
+            transition: 0.1s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+        }
+
+        .btn::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            filter: blur(15px);
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 1rem;
+        }
+
+        .btn:active {
+            transform: scale(0.9) rotate(3deg);
+            background: radial-gradient(circle farthest-corner at 10% 20%, rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2%);
+            transition: 0.5s;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        /* Member List */
+        .member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .member-item:last-child {
+            border-bottom: none;
+        }
+
+        .online-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .online {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .offline {
+            background: #bbb;
+        }
+
+        .host-badge {
+            background: linear-gradient(135deg, rgba(255,94,247,0.3), rgba(2,245,255,0.3));
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .group-id {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 10px;
+            word-break: break-all;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .chat-container {
+                flex-direction: column;
+            }
+
+            .chat-main {
+                order: 2;
+            }
+
+            .members-sidebar {
+                order: 1;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .header {
+                padding: 12px;
+            }
+
+            .header h2 {
+                font-size: 1.3em;
+                margin: 0;
+            }
+
+            .messages-container {
+                padding: 15px;
+                height: 350px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .input-container {
+                padding: 12px;
+            }
+
+            #send-button {
+                min-width: 80px;
+                height: 40px;
+                font-size: 13px;
+            }
+
+            .btn {
+                min-width: 70px;
+                height: 32px;
+                font-size: 13px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .message {
+                max-width: 90%;
+            }
+
+            .message-content {
+                padding: 8px;
+                font-size: 0.95em;
+            }
+
+            .message-sender {
+                font-size: 0.75em;
+            }
+
+            .message-time {
+                font-size: 0.75em;
+            }
+
+            #message-input {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .member-item {
+                font-size: 0.9em;
+                padding: 6px;
+            }
+
+            .host-badge {
+                font-size: 0.75em;
+                padding: 1px 4px;
+            }
+
+            .group-id {
+                font-size: 0.85em;
+                padding: 8px;
+            }
+        }
+
+        /* Animation */
+        @keyframes steam {
+            0% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 400% 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-main">
+            <div class="header">
+                <div class="group-info">
+                    <h2>{{ group.name }}</h2>
+                </div>
+                <a href="{% url 'my_groups' %}" class="btn btn-back">Back to Groups</a>
+            </div>
+
+            <div class="messages-container" id="messages-container">
+                {% for message in messages %}
+                    <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                        {% if message.sender != request.user %}
+                            <div class="message-sender">{{ message.sender.profile.nickname }}</div>
+                        {% endif %}
+                        <div class="message-content">
+                            {{ message.content }}
+                            <div class="message-time">
+                                {{ message.timestamp|date:"g:i A" }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <span id="typing-text"></span>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="Type a message..." autofocus>
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+
+        <div class="members-sidebar">
+            <h3>Members ({{ members|length }})</h3>
+            {% if is_host %}
+                <div class="group-id">
+                    Group ID: {{ group.group_id }}
+                </div>
+            {% endif %}
+            <ul class="member-list">
+                {% for member in members %}
+                    <li class="member-item">
+                        <span class="online-status {% if member.profile.is_online %}online{% else %}offline{% endif %}"></span>
+                        {{ member.profile.nickname }}
+                        {% if member == group.host %}
+                            <span class="host-badge">Host</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {{ group.group_id|json_script:"group-id" }}
+    {{ request.user.username|json_script:"username" }}
+    {{ request.user.profile.nickname|json_script:"user-nickname" }}
+
+    <script>
+        const groupId = JSON.parse(document.getElementById('group-id').textContent);
+        const username = JSON.parse(document.getElementById('username').textContent);
+        const userNickname = JSON.parse(document.getElementById('user-nickname').textContent);
+        
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const chatSocket = new WebSocket(
+            protocol + window.location.host + '/ws/group/' + groupId + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            
+            if (data.type === 'message') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${data.username === username ? 'sent' : 'received'}`;
+                
+                const time = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+                
+                let messageHTML = '';
+                if (data.username !== username) {
+                    messageHTML += `<div class="message-sender">${data.nickname}</div>`;
+                }
+                messageHTML += `
+                    <div class="message-content">
+                        ${data.message}
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                
+                messageDiv.innerHTML = messageHTML;
+                messagesContainer.appendChild(messageDiv);
+                scrollToBottom();
+            } else if (data.type === 'typing_indicator') {
+                if (data.username !== username) {
+                    if (data.is_typing) {
+                        typingUsers.add(data.nickname);
+                    } else {
+                        typingUsers.delete(data.nickname);
+                    }
+                    updateTypingIndicator();
+                }
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+            // Try to reconnect after 1 second
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        };
+
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+        };
+
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const typingText = document.getElementById('typing-text');
+
+        let typingTimeout;
+        let typingUsers = new Set();
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function updateTypingIndicator() {
+            if (typingUsers.size === 0) {
+                typingIndicator.style.display = 'none';
+            } else {
+                const users = Array.from(typingUsers);
+                typingText.textContent = users.join(', ') + (users.length === 1 ? ' is ' : ' are ') + 'typing...';
+                typingIndicator.style.display = 'block';
+            }
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    type: 'message',
+                    message: message
+                }));
+                messageInput.value = '';
+            }
+        }
+
+        function showTypingIndicator() {
+            chatSocket.send(JSON.stringify({
+                type: 'typing_start'
+            }));
+        }
+
+        function hideTypingIndicator() {
+            chatSocket.send(JSON.stringify({
+                type: 'typing_stop'
+            }));
+        }
+
+        messageInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+            
+            clearTimeout(typingTimeout);
+            showTypingIndicator();
+            
+            typingTimeout = setTimeout(() => {
+                hideTypingIndicator();
+            }, 1000);
+        });
+
+        sendButton.onclick = sendMessage;
+
+
+        // Scroll to bottom on load
+        scrollToBottom();
+    </script>
+</body>
+</html>
