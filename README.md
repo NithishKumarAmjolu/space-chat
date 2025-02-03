@@ -5,7 +5,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 ## Pages and Features
 
 ### 1. Home Page (home.html)
-![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/1.png)
+![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/3.png)
 
 **Features:**
 - User welcome header with nickname display
@@ -22,7 +22,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Custom button designs with hover and active states
 
 ### 2. Chat Room (chat_room.html)
-![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/Screenshot%20(3).png)
+![Chat Room](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/5.png)
 
 **Features:**
 - Real-time one-on-one chat interface
@@ -41,8 +41,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Custom scrollbar styling
 
 ### 3. Group Chat Room (group_chat_room.html)
-### 1. Home Page (home.html)
-![Home Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/Screenshot%20(3).png)
+![Group Chat Room](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/6.png)
 
 
 **Features:**
@@ -62,6 +61,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Member list management
 
 ### 4. Login Page (LoginPage.html)
+![LoginPage](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/1.png)
 
 **Features:**
 - User authentication interface
@@ -79,6 +79,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Custom button animations with gradient effects
 
 ### 5. Sign Up Page (signup.html)
+![Sign Up Page](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/2.png)
 
 **Features:**
 - User registration interface
@@ -97,6 +98,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Mobile-optimized layout
 
 ### 6. Search Users (search_users.html)
+![Search Users](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/4.png)
 
 **Features:**
 - User search functionality by username or nickname
@@ -116,6 +118,7 @@ A modern, feature-rich chat application built with Django and WebSocket technolo
 - Mobile-optimized search experience
 
 ### 7. My Groups (my_groups.html)
+![Search Users](https://raw.githubusercontent.com/NithishKumarAmjolu/space-chat/refs/heads/main/images/7.png)
 
 **Features:**
 - Overview of hosted and joined groups
